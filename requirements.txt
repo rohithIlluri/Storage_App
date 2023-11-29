@@ -1,0 +1,12 @@
+Flask
+google-api-core
+google-cloud-secret-manager
+google-cloud-datastore
+google-cloud-storage
+pyrebase4
+python-jose
+requests
+PyJWT
+python-dotenv
+redis
+Flask-Session

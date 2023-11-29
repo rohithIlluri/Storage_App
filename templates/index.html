@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Storage App</title>
+    <style>
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(-45deg, 
+    #ADD8E6,
+        white, 
+        #0000FF);
+    background-size: 200% 200%;
+    animation: smoothGradient 15s linear infinite;
+}
+
+@keyframes smoothGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            animation: containerAnimation 2s ease-in-out;
+        }
+        .flash-messages {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    background-color: #4CAF50; /* Default background color */
+    color: white;
+    text-align: center;
+}
+
+.alert.success {
+    background-color: #4CAF50;
+}
+
+.alert.error {
+    background-color: #f44336;
+}
+
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        ul li {
+            margin-right: 10px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(180deg, #87CEEB, #87CEFA, #ADD8E6);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        a:hover {
+            background: linear-gradient(180deg, #1976D2, #1565C0);
+        }
+
+        /* Styling for the logout button */
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #ff4b4b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover effect for the logout button */
+        .logout-button:hover {
+            background-color: #ff6868;
+            transform: scale(1.05);
+        }
+        .greeting {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50; /* Green background */
+            color: white; /* White text color */
+            padding: 20px 40px; /* Increased padding for larger size */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 2s ease-out;
+            transition: box-shadow 0.3s; /* Transition for shadow effect */
+            font-size: 1.2em; /* Larger font size */
+            z-index: 10;
+        }
+
+        /* Simplified hover effect for the greeting card */
+        .greeting:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Enhanced shadow for a subtle hover effect */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes containerAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+    <script>
+       
+       setTimeout(function() {
+        var flashMessages = document.querySelectorAll('.alert');
+        flashMessages.forEach(function(msg) {
+            msg.style.display = 'none';
+        });
+    }, 5000);
+
+
+        
+        window.onload = function() {
+            var userEmail = document.getElementById('userEmail').textContent;
+            if (userEmail) {
+                document.getElementById('greeting').style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert {{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="header">
+        <h1>Storage Application</h1>
+        <p>Manage your files stored in Google Cloud Storage.</p>
+        <div class="container">
+            <ul>
+                <li><a href="/list">List Files</a></li>
+                <li><a href="/upload">Upload File</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="greeting" id="greeting" style="display: none;">
+        Welcome, <span id="userEmail">{{ session.get('user_email') }}</span>!
+    </div>
+
+<!-- Logout button using a form -->
+<form action="/logout" method="post" style="display: inline;">
+    <button type="submit" class="logout-button">Logout</button>
+</form>
+
+</body>
+</html>

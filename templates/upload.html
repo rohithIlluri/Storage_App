@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File</title>
+    <style>
+        body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(-45deg, 
+    #ADD8E6,
+        white, 
+        #0000FF);
+    background-size: 200% 200%;
+    animation: smoothGradient 15s linear infinite;
+}
+
+@keyframes smoothGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+
+        /* Header Fixed at the Top */
+        .header {
+            position: fixed;
+            top: 175px;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Container for the form */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow: auto;
+            padding-top: 70px; /* Space for the fixed header */
+        }
+
+        /* Form and Input Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"], input[type="submit"] {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 70%;
+            border: 2px solid #87CEEB;
+            box-shadow: 0 0 5px rgba(135, 206, 250, 0.5);
+        }
+
+        input[type="submit"] {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: #FF0000;
+            margin-top: 10px;
+        }
+
+        /* Button Styles */
+        .back-button, .list-button, .logout-button {
+            position: fixed;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        .back-button {
+            bottom: 20px;
+            left: 20px;
+            background-color: #28a745;
+        }
+
+        .list-button {
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+        }
+
+        /* Styling for the logout button */
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #ff4b4b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover effect for the logout button */
+        .logout-button:hover {
+            background-color: #ff6868;
+            transform: scale(1.05);
+        }
+        /* Responsiveness */
+        @media screen and (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding-top: 60px;
+            }
+
+            input[type="file"], input[type="submit"] {
+                width: 90%;
+            }
+
+            .back-button, .list-button, .logout-button {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+    <script>
+        function redirectToUploadList() {
+            window.location.href = '/list';
+        }
+
+        function validateFile() {
+            var fileInput = document.querySelector('input[type="file"]');
+            var errorMessage = document.getElementById('errorMessage');
+
+            if (fileInput.files.length === 0) {
+                errorMessage.textContent = 'Please select a file to upload.';
+                return false;
+            }
+
+            var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(fileInput.files[0].type)) {
+                errorMessage.textContent = 'Invalid file type. Please select a valid image.';
+                return false;
+            }
+
+            errorMessage.textContent = '';
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Upload a File</h1>
+    </div>
+    <div class="container">
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*">
+            <div class="error-message" id="errorMessage"></div>
+            <input type="submit" value="Upload" onclick="return validateFile()">
+        </form>
+    </div>
+
+    <button id="backButton" class="back-button" onclick="window.history.back();">Back</button>
+    <a href="/list"><button id="listButton" class="list-button">List</button></a>
+    <!-- Logout button using a form -->
+<form action="/logout" method="post" style="display: inline;">
+    <button type="submit" class="logout-button">Logout</button>
+</form>
+</body>
+</html>
